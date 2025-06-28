@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "tavishai",
+  "version": "${version}",
+  "name": "TavishAI",
+  "description": "A mod that uses natural lingo and converts it to / commands or other needed commands for other mods",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "org.example.AIMCMod"
+    ],
+    "main": [
+      "org.example.AIMCMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

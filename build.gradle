@@ -1,0 +1,78 @@
+plugins {
+    id 'fabric-loom' version '1.10.0'
+    id 'java'
+}
+
+// These properties should come from your gradle.properties file, ensure they exist there
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+java {
+    withSourcesJar()
+    toolchain.languageVersion = JavaLanguageVersion.of(21) // Ensure JDK 21
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release.set(21) // Explicitly set target compatibility to Java 21
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "Fabric"
+        url = "https://maven.fabricmc.net/"
+    }
+}
+
+dependencies {
+    // Core Minecraft and Fabric dependencies
+    minecraft "net.minecraft:minecraft-client:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    modImplementation "net.fabricmc:fabric-api:${project.fabric_api_version}"
+
+    // For Gson (used for JSON parsing)
+    implementation "com.google.code.gson:gson:2.10.1"
+
+    // Include the HTTP client libraries
+    // java.net.http.HttpClient is part of the standard Java Platform Module System (JPMS).
+    // If you're encountering 'Cannot resolve symbol HttpClient', it might indicate
+    // a module path issue or an older Java version being implicitly used for compilation
+    // despite toolchain settings. Explicitly adding it as a dependency, though usually not needed for java.net.http,
+    // can sometimes force resolution in problematic setups.
+    // However, it's more likely a general dependency resolution failure.
+    // If you explicitly need it, for Java 11+, you normally don't declare it.
+    // Let's rely on the module system, assuming correct JDK setup.
+}
+
+processResources {
+    from(project.file("src/main/resources")) {
+        expand project.properties.findAll { it.key.startsWith("mod_") || it.key.startsWith("minecraft_") }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName}" }
+    }
+}
+
+remapJar {
+    input.set(tasks.jar.outputs.files)
+    destinationDirectory.set(file("${project.buildDir}/libs"))
+    archiveClassifier.set("fabric")
+    excludeConfigurations.set([
+            configurations.modRuntime,
+            configurations.implementation
+    ])
+}
