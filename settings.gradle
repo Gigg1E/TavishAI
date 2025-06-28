@@ -9,4 +9,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = "TavishAI" // Make sure this matches your project name exactly
+rootProject.name = "TavishAI"
+    
