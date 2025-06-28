@@ -1,5 +1,6 @@
 plugins {
-    id 'fabric-loom' version '1.10.0'
+    // CRITICAL FIX: Changing Fabric Loom version to 1.1.0, which is known to be stable and available
+    id 'fabric-loom' version '1.1.0'
     id 'java'
 }
 
@@ -38,16 +39,6 @@ dependencies {
 
     // For Gson (used for JSON parsing)
     implementation "com.google.code.gson:gson:2.10.1"
-
-    // Include the HTTP client libraries
-    // java.net.http.HttpClient is part of the standard Java Platform Module System (JPMS).
-    // If you're encountering 'Cannot resolve symbol HttpClient', it might indicate
-    // a module path issue or an older Java version being implicitly used for compilation
-    // despite toolchain settings. Explicitly adding it as a dependency, though usually not needed for java.net.http,
-    // can sometimes force resolution in problematic setups.
-    // However, it's more likely a general dependency resolution failure.
-    // If you explicitly need it, for Java 11+, you normally don't declare it.
-    // Let's rely on the module system, assuming correct JDK setup.
 }
 
 processResources {
